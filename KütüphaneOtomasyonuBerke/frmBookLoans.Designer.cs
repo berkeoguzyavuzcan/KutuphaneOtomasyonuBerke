@@ -104,7 +104,6 @@
             // 
             // gbxMembers
             // 
-            this.gbxMembers.Controls.Add(this.btnCancel);
             this.gbxMembers.Controls.Add(this.label7);
             this.gbxMembers.Controls.Add(this.tbxFirstName);
             this.gbxMembers.Controls.Add(this.label10);
@@ -117,7 +116,7 @@
             this.gbxMembers.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.gbxMembers.Location = new System.Drawing.Point(397, 12);
             this.gbxMembers.Name = "gbxMembers";
-            this.gbxMembers.Size = new System.Drawing.Size(380, 255);
+            this.gbxMembers.Size = new System.Drawing.Size(380, 227);
             this.gbxMembers.TabIndex = 6;
             this.gbxMembers.TabStop = false;
             this.gbxMembers.Text = "Üye Bilgileri";
@@ -126,12 +125,13 @@
             // 
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnCancel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnCancel.Location = new System.Drawing.Point(12, 193);
+            this.btnCancel.Location = new System.Drawing.Point(596, 273);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(350, 50);
+            this.btnCancel.Size = new System.Drawing.Size(181, 50);
             this.btnCancel.TabIndex = 14;
-            this.btnCancel.Text = "İptal Et\r\n";
+            this.btnCancel.Text = "GERİ DÖN";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // label7
             // 
@@ -239,7 +239,7 @@
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label20.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label20.Location = new System.Drawing.Point(57, 62);
+            this.label20.Location = new System.Drawing.Point(58, 60);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(70, 25);
             this.label20.TabIndex = 5;
@@ -249,7 +249,7 @@
             // tbxAuthorName
             // 
             this.tbxAuthorName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.tbxAuthorName.Location = new System.Drawing.Point(130, 57);
+            this.tbxAuthorName.Location = new System.Drawing.Point(139, 58);
             this.tbxAuthorName.Name = "tbxAuthorName";
             this.tbxAuthorName.Size = new System.Drawing.Size(204, 29);
             this.tbxAuthorName.TabIndex = 9;
@@ -259,7 +259,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(57, 21);
+            this.label1.Location = new System.Drawing.Point(58, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(68, 25);
             this.label1.TabIndex = 5;
@@ -269,7 +269,7 @@
             // tbxBookName
             // 
             this.tbxBookName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.tbxBookName.Location = new System.Drawing.Point(130, 16);
+            this.tbxBookName.Location = new System.Drawing.Point(139, 17);
             this.tbxBookName.Name = "tbxBookName";
             this.tbxBookName.Size = new System.Drawing.Size(204, 29);
             this.tbxBookName.TabIndex = 9;
@@ -279,7 +279,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label2.Location = new System.Drawing.Point(71, 190);
+            this.label2.Location = new System.Drawing.Point(72, 188);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 25);
             this.label2.TabIndex = 6;
@@ -291,7 +291,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label3.Location = new System.Drawing.Point(9, 140);
+            this.label3.Location = new System.Drawing.Point(10, 138);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(124, 25);
             this.label3.TabIndex = 7;
@@ -301,7 +301,7 @@
             // tbxStocks
             // 
             this.tbxStocks.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.tbxStocks.Location = new System.Drawing.Point(133, 187);
+            this.tbxStocks.Location = new System.Drawing.Point(141, 186);
             this.tbxStocks.Name = "tbxStocks";
             this.tbxStocks.Size = new System.Drawing.Size(204, 29);
             this.tbxStocks.TabIndex = 10;
@@ -311,7 +311,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label4.Location = new System.Drawing.Point(32, 100);
+            this.label4.Location = new System.Drawing.Point(33, 98);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(99, 25);
             this.label4.TabIndex = 8;
@@ -321,7 +321,7 @@
             // tbxPageCount
             // 
             this.tbxPageCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.tbxPageCount.Location = new System.Drawing.Point(132, 137);
+            this.tbxPageCount.Location = new System.Drawing.Point(139, 138);
             this.tbxPageCount.Name = "tbxPageCount";
             this.tbxPageCount.Size = new System.Drawing.Size(204, 29);
             this.tbxPageCount.TabIndex = 11;
@@ -329,7 +329,7 @@
             // tbxPublisherName
             // 
             this.tbxPublisherName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.tbxPublisherName.Location = new System.Drawing.Point(132, 95);
+            this.tbxPublisherName.Location = new System.Drawing.Point(139, 96);
             this.tbxPublisherName.Name = "tbxPublisherName";
             this.tbxPublisherName.Size = new System.Drawing.Size(204, 29);
             this.tbxPublisherName.TabIndex = 12;
@@ -420,7 +420,7 @@
             this.gbxInformation.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.gbxInformation.Location = new System.Drawing.Point(833, 13);
             this.gbxInformation.Name = "gbxInformation";
-            this.gbxInformation.Size = new System.Drawing.Size(205, 255);
+            this.gbxInformation.Size = new System.Drawing.Size(205, 226);
             this.gbxInformation.TabIndex = 11;
             this.gbxInformation.TabStop = false;
             this.gbxInformation.Text = "Bilgi Kutusu";
@@ -430,7 +430,7 @@
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label18.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label18.Location = new System.Drawing.Point(6, 148);
+            this.label18.Location = new System.Drawing.Point(6, 126);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(113, 40);
             this.label18.TabIndex = 0;
@@ -441,7 +441,7 @@
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label17.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label17.Location = new System.Drawing.Point(6, 106);
+            this.label17.Location = new System.Drawing.Point(6, 96);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(174, 20);
             this.label17.TabIndex = 0;
@@ -452,7 +452,7 @@
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label19.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label19.Location = new System.Drawing.Point(6, 201);
+            this.label19.Location = new System.Drawing.Point(6, 181);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(135, 20);
             this.label19.TabIndex = 0;
@@ -463,7 +463,7 @@
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label15.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label15.Location = new System.Drawing.Point(6, 70);
+            this.label15.Location = new System.Drawing.Point(6, 64);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(39, 20);
             this.label15.TabIndex = 0;
@@ -485,7 +485,7 @@
             this.btnProcesDone.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnProcesDone.Location = new System.Drawing.Point(397, 274);
             this.btnProcesDone.Name = "btnProcesDone";
-            this.btnProcesDone.Size = new System.Drawing.Size(380, 51);
+            this.btnProcesDone.Size = new System.Drawing.Size(175, 51);
             this.btnProcesDone.TabIndex = 12;
             this.btnProcesDone.Text = "Tamamla";
             this.btnProcesDone.UseVisualStyleBackColor = true;
@@ -508,6 +508,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(24)))), ((int)(((byte)(33)))));
             this.ClientSize = new System.Drawing.Size(1050, 540);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnStateOfDue);
             this.Controls.Add(this.btnProcesDone);
             this.Controls.Add(this.gbxInformation);

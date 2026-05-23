@@ -17,6 +17,9 @@ namespace KütüphaneOtomasyonuBerke
 
         private void frmBooks_Load(object sender, EventArgs e)
         {
+            dgwBooks.ReadOnly = true;
+            dgwBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgwBooks.AllowUserToAddRows = false;
             BringAndSearchDatas();
             ListAuthors();
         }
@@ -111,12 +114,23 @@ namespace KütüphaneOtomasyonuBerke
 
         private void btnInsertBook_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(tbxBookName.Text) || cbxAuthorName.SelectedValue == null)
+            // --- 1. KORUMA KALKANI: BOŞ ALAN KONTROLÜ ---
+            if (string.IsNullOrWhiteSpace(tbxBookName.Text) ||
+                string.IsNullOrWhiteSpace(tbxPublisher.Text) ||
+                cbxAuthorName.SelectedValue == null)
             {
-                MessageBox.Show("Lütfen tüm alanları doldurunuz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen Kitap Adı, Yayınevi ve Yazar alanlarını eksiksiz doldurun!", "Eksik Veri", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            // --- 2. KORUMA KALKANI: SAYFA VE STOK KONTROLÜ ---
+            if (numPageCount.Value <= 0 || numStock.Value <= 0)
+            {
+                MessageBox.Show("Sayfa sayısı ve Stok miktarı 0 veya daha küçük olamaz!", "Hatalı Veri", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // --- HER ŞEY DOĞRUYSA VERİTABANI İŞLEMİNE BAŞLA ---
             using (SqlConnection conn = SqlCon.Connect())
             {
                 conn.Open();
@@ -124,13 +138,14 @@ namespace KütüphaneOtomasyonuBerke
                 try
                 {
                     string qBook = @"INSERT INTO Books (BookName, PublisherName, PageCount, QuantityInStocks, Status) 
-                                     VALUES (@name, @pub, @page, @stock, 1); SELECT SCOPE_IDENTITY();";
+                             VALUES (@name, @pub, @page, @stock, 1); SELECT SCOPE_IDENTITY();";
 
                     SqlCommand cmdB = new SqlCommand(qBook, conn, trans);
                     cmdB.Parameters.AddWithValue("@name", tbxBookName.Text);
                     cmdB.Parameters.AddWithValue("@pub", tbxPublisher.Text);
-                    cmdB.Parameters.AddWithValue("@page", numPageCount.Text);
-                    cmdB.Parameters.AddWithValue("@stock", numStock.Text);
+
+                    cmdB.Parameters.AddWithValue("@page", (int)numPageCount.Value);
+                    cmdB.Parameters.AddWithValue("@stock", (int)numStock.Value);
 
                     int newBookId = Convert.ToInt32(cmdB.ExecuteScalar());
 
@@ -141,21 +156,26 @@ namespace KütüphaneOtomasyonuBerke
                     cmdRel.ExecuteNonQuery();
 
                     trans.Commit();
-                    MessageBox.Show("Kitap başarıyla eklendi.");
+                    MessageBox.Show("Kitap başarıyla eklendi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     BringAndSearchDatas();
                 }
                 catch (Exception ex)
                 {
                     trans.Rollback();
-                    MessageBox.Show("Hata oluştu: " + ex.Message);
+                    MessageBox.Show("Hata oluştu: " + ex.Message, "SQL Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private void btnKitapGeri_Click(object sender, EventArgs e)
         {
-            new frmMain().Show();
-            this.Close();
+            // RAM'de yeni ana form oluşturmak yerine arkadakini çağırıyoruz
+            Form frmMainInstance = Application.OpenForms["frmMain"];
+            if (frmMainInstance != null)
+            {
+                frmMainInstance.Show();
+            }
+            this.Close(); // Kitaplar formunu kapat
         }
 
         private void tbxSearchBook_TextChanged(object sender, EventArgs e) => BringAndSearchDatas();

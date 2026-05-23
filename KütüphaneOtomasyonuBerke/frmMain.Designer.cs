@@ -30,14 +30,11 @@
         {
             this.lblUserName = new System.Windows.Forms.Label();
             this.lblRoleName = new System.Windows.Forms.Label();
-            this.lblUserId = new System.Windows.Forms.Label();
             this.btnBooks = new System.Windows.Forms.Button();
             this.btnMembers = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.btnBack = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.btnLoans = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -63,17 +60,6 @@
             this.lblRoleName.Name = "lblRoleName";
             this.lblRoleName.Size = new System.Drawing.Size(0, 21);
             this.lblRoleName.TabIndex = 1;
-            // 
-            // lblUserId
-            // 
-            this.lblUserId.AutoSize = true;
-            this.lblUserId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(24)))), ((int)(((byte)(33)))));
-            this.lblUserId.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.lblUserId.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(163)))), ((int)(((byte)(175)))));
-            this.lblUserId.Location = new System.Drawing.Point(481, 25);
-            this.lblUserId.Name = "lblUserId";
-            this.lblUserId.Size = new System.Drawing.Size(0, 25);
-            this.lblUserId.TabIndex = 2;
             // 
             // btnBooks
             // 
@@ -109,7 +95,7 @@
             this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(18)))), ((int)(((byte)(25)))));
             this.label1.Font = new System.Drawing.Font("Segoe UI", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
-            this.label1.Location = new System.Drawing.Point(42, 172);
+            this.label1.Location = new System.Drawing.Point(40, 235);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(253, 47);
             this.label1.TabIndex = 5;
@@ -133,37 +119,12 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(18)))), ((int)(((byte)(25)))));
-            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(342, 540);
             this.panel1.TabIndex = 7;
-            // 
-            // label2
-            // 
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(163)))), ((int)(((byte)(175)))));
-            this.label2.Location = new System.Drawing.Point(12, 246);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(327, 84);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Kütüphane otomasyon sistemine hoş geldiniz. Güvenli oturum açma işleminin ardında" +
-    "n sistemin kalbini oluşturan iki ana yönetim merkezine tam yetkiyle erişim sağla" +
-    "yacaksınız:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(24)))), ((int)(((byte)(33)))));
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(70)))), ((int)(((byte)(229)))));
-            this.label3.Location = new System.Drawing.Point(478, 116);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(418, 47);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "KÜTÜPHANE İŞLEMLERİ";
             // 
             // btnLoans
             // 
@@ -186,10 +147,8 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(24)))), ((int)(((byte)(33)))));
             this.ClientSize = new System.Drawing.Size(1050, 540);
             this.Controls.Add(this.btnLoans);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.lblUserName);
-            this.Controls.Add(this.lblUserId);
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnMembers);
             this.Controls.Add(this.lblRoleName);
@@ -209,14 +168,11 @@
 
         private System.Windows.Forms.Label lblUserName;
         private System.Windows.Forms.Label lblRoleName;
-        private System.Windows.Forms.Label lblUserId;
         private System.Windows.Forms.Button btnBooks;
         private System.Windows.Forms.Button btnMembers;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnLoans;
     }
 }

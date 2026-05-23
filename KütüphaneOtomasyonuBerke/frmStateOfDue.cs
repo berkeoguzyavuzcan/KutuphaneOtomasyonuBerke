@@ -16,6 +16,15 @@ namespace KütüphaneOtomasyonuBerke
 
         private void frmStateOfDue_Load(object sender, EventArgs e)
         {
+            // Teslim edilmeyenler tablosu ayarları
+            dgwNotCompletedReturns.ReadOnly = true;
+            dgwNotCompletedReturns.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgwNotCompletedReturns.AllowUserToAddRows = false;
+
+            // Teslim edilenler tablosu ayarları
+            dgwCompletedReturns.ReadOnly = true;
+            dgwCompletedReturns.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgwCompletedReturns.AllowUserToAddRows = false;
             ListeleriYenile();
         }
 
@@ -109,26 +118,46 @@ namespace KütüphaneOtomasyonuBerke
                 using (SqlConnection conn = SqlCon.Connect())
                 {
                     conn.Open();
-                    string query = "UPDATE BookLoans SET Status = 0, ReturnDate = @ret WHERE LoanId = @id";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlTransaction trans = conn.BeginTransaction())
                     {
-                        cmd.Parameters.AddWithValue("@ret", DateTime.Now);
-                        cmd.Parameters.AddWithValue("@id", _selectedLoanId);
-                        cmd.ExecuteNonQuery();
+                        try
+                        {
+                            // 1. Ödünç Kaydını Güncelle (Kapat)
+                            string query = "UPDATE BookLoans SET Status = 0, ReturnDate = @ret WHERE LoanId = @id";
+                            using (SqlCommand cmd = new SqlCommand(query, conn, trans))
+                            {
+                                cmd.Parameters.AddWithValue("@ret", DateTime.Now);
+                                cmd.Parameters.AddWithValue("@id", _selectedLoanId);
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            // 2. İade Edilen Kitabın Stoğunu Veritabanında 1 Artır
+                            string stockQuery = "UPDATE Books SET QuantityInStocks = QuantityInStocks + 1 WHERE BookId = (SELECT BookId FROM BookLoans WHERE LoanId = @id)";
+                            using (SqlCommand cmdStock = new SqlCommand(stockQuery, conn, trans))
+                            {
+                                cmdStock.Parameters.AddWithValue("@id", _selectedLoanId);
+                                cmdStock.ExecuteNonQuery();
+                            }
+
+                            trans.Commit();
+                            MessageBox.Show("İade işlemi başarıyla tamamlandı ve kitap stoğu artırıldı.");
+
+                            ListeleriYenile();
+                            _selectedLoanId = 0;
+
+                            tbxFirstName.Clear();
+                            tbxLastName.Clear();
+                            tbxBookName.Clear();
+                            tbxDueDate.Clear();
+                            tbxLoanDate.Clear();
+                        }
+                        catch (Exception ex)
+                        {
+                            trans.Rollback();
+                            MessageBox.Show("İade işlemi sırasında hata oluştu: " + ex.Message);
+                        }
                     }
                 }
-
-                ListeleriYenile();
-                _selectedLoanId = 0;
-
-                tbxFirstName.Clear();
-                tbxLastName.Clear();
-                tbxBookName.Clear();
-                tbxDueDate.Clear();
-                tbxLoanDate.Clear();
-
-                MessageBox.Show("İade işlemi başarıyla tamamlandı.");
             }
         }
 

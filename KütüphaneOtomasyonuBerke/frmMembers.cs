@@ -7,19 +7,18 @@ namespace KütüphaneOtomasyonuBerke
 {
     public partial class frmMembers : Form
     {
+        int _selectedUserId;
+
         public frmMembers()
         {
             InitializeComponent();
         }
 
-        
         private void BringAndSearchMemberDatas()
         {
             using (SqlConnection conn = SqlCon.Connect())
             {
                 conn.Open();
-
-                
                 string query = @"SELECT au.UserId, au.FirstName, au.LastName, 
                                 STRING_AGG(ar.RoleName, ', ') as Roles, 
                                 au.IdentityNumber, au.BirthDate, au.CreatedDate 
@@ -44,9 +43,37 @@ namespace KütüphaneOtomasyonuBerke
             }
         }
 
-       
         private void btnInsert_Click(object sender, EventArgs e)
         {
+            // --- 1. KORUMA KALKANI: BOŞ ALAN KONTROLÜ ---
+            if (string.IsNullOrWhiteSpace(tbxFirstName.Text) ||
+                string.IsNullOrWhiteSpace(tbxLastName.Text) ||
+                string.IsNullOrWhiteSpace(tbxIdentityNumber.Text))
+            {
+                MessageBox.Show("Ad, Soyad ve TC Kimlik numarası boş bırakılamaz!", "Eksik Veri", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; // Hata varsa kodu burada kes, aşağıya inme
+            }
+
+
+            if (tbxIdentityNumber.Text.Length != 11 || !long.TryParse(tbxIdentityNumber.Text, out _))
+            {
+                MessageBox.Show("TC Kimlik Numarası tam 11 haneli olmalı ve sadece rakamlardan oluşmalıdır!", "Hatalı Giriş", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if ((chkAdmin.Checked || chkSuperAdmin.Checked) &&
+                (string.IsNullOrWhiteSpace(tbxUserName.Text) || string.IsNullOrWhiteSpace(tbxPassword.Text)))
+            {
+                MessageBox.Show("Yönetici yetkisi veriyorsanız Kullanıcı Adı ve Şifre boş bırakılamaz!", "Eksik Veri", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (chkSuperAdmin.Checked && Session.ActiveRoleId != 1)
+            {
+                MessageBox.Show("Yetkiniz yönetici eklemek için yetersiz!", "Yetki Hatası", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
             using (SqlConnection conn = SqlCon.Connect())
             {
                 conn.Open();
@@ -54,8 +81,8 @@ namespace KütüphaneOtomasyonuBerke
                 try
                 {
                     string queryForUser = @"INSERT INTO AppUsers (FirstName, LastName, IdentityNumber, Username, Password, BirthDate, Gender) 
-                                           VALUES (@firstName, @lastName, @identityNumber, @userName, @password, @birthDate, @gender); 
-                                           SELECT SCOPE_IDENTITY();";
+                                   VALUES (@firstName, @lastName, @identityNumber, @userName, @password, @birthDate, @gender); 
+                                   SELECT SCOPE_IDENTITY();";
 
                     using (SqlCommand cmdForUser = new SqlCommand(queryForUser, conn, transaction))
                     {
@@ -71,21 +98,17 @@ namespace KütüphaneOtomasyonuBerke
 
                         if (chkMember.Checked) AssignRoleToUser(conn, transaction, insertedUserId, 3);
                         if (chkAdmin.Checked) AssignRoleToUser(conn, transaction, insertedUserId, 2);
-                        if (chkSuperAdmin.Checked)
-                        {
-                            if (Session.ActiveRoleId != 1) MessageBox.Show("Yetkiniz yönetici eklemek için yetersiz!");
-                            else AssignRoleToUser(conn, transaction, insertedUserId, 1);
-                        }
+                        if (chkSuperAdmin.Checked) AssignRoleToUser(conn, transaction, insertedUserId, 1);
 
                         transaction.Commit();
-                        MessageBox.Show("Veriler Eklendi.");
-                        BringAndSearchMemberDatas(); 
+                        MessageBox.Show("Üye başarıyla eklendi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        BringAndSearchMemberDatas();
                     }
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("Hata: " + ex.Message);
+                    MessageBox.Show("Kayıt sırasında bir SQL hatası oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -101,9 +124,13 @@ namespace KütüphaneOtomasyonuBerke
             }
         }
 
-        
         private void frmMembers_Load(object sender, EventArgs e)
         {
+            dgwMembers.ReadOnly = true;
+            dgwMembers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgwMembers.AllowUserToAddRows = false;
+            tbxIdentityNumber.MaxLength = 11;
+
             ChangePassive();
             BringAndSearchMemberDatas();
         }
@@ -114,7 +141,7 @@ namespace KütüphaneOtomasyonuBerke
             {
                 frmUpdateMembers frm = new frmUpdateMembers(_selectedUserId);
                 frm.ShowDialog();
-                BringAndSearchMemberDatas(); 
+                BringAndSearchMemberDatas();
             }
             else MessageBox.Show("Lütfen bir satır seçin.");
         }
@@ -128,7 +155,6 @@ namespace KütüphaneOtomasyonuBerke
                 {
                     _selectedUserId = Convert.ToInt32(row.Cells["UserId"].Value);
 
-                   
                     tbxUpdateName.Text = row.Cells["FirstName"].Value?.ToString();
                     tbxUpdateLastName.Text = row.Cells["LastName"].Value?.ToString();
                     tbxUpdateIdentity.Text = row.Cells["IdentityNumber"].Value?.ToString();
@@ -142,14 +168,11 @@ namespace KütüphaneOtomasyonuBerke
             }
         }
 
-        
-
         void ChangePassive() { tbxUserName.Enabled = false; tbxPassword.Enabled = false; }
         private void chkAdmin_CheckedChanged(object sender, EventArgs e) { if (chkAdmin.Checked) { tbxUserName.Enabled = true; tbxPassword.Enabled = true; } else ChangePassive(); }
         private void chkSuperAdmin_CheckedChanged(object sender, EventArgs e) { if (chkSuperAdmin.Checked) { tbxUserName.Enabled = true; tbxPassword.Enabled = true; } else ChangePassive(); }
-        private void btnÜyeGeri_Click(object sender, EventArgs e) { new frmMain().Show(); this.Close(); }
         private void tbxMember_TextChanged(object sender, EventArgs e) { BringAndSearchMemberDatas(); }
-        int _selectedUserId;
+
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (_selectedUserId > 0)
@@ -163,7 +186,7 @@ namespace KütüphaneOtomasyonuBerke
                         using (SqlConnection conn = SqlCon.Connect())
                         {
                             conn.Open();
-                            SqlTransaction transaction = conn.BeginTransaction(); // İşlemleri tek seferde yapalım
+                            SqlTransaction transaction = conn.BeginTransaction();
 
                             try
                             {
@@ -173,19 +196,25 @@ namespace KütüphaneOtomasyonuBerke
                                 cmdUser.Parameters.AddWithValue("@id", _selectedUserId);
                                 cmdUser.ExecuteNonQuery();
 
-                                // 2. ÖNEMLİ: Bu üyeye ait aktif ödünçleri de pasife al veya sil
-                                // Eğer ödünç kayıtlarını da "kapalı" yapmak istiyorsan:
+                                // STOK DÜZELTMESİ: Üyenin elindeki tüm aktif kitapların stoğunu kütüphaneye geri yükle
+                                string queryReturnStocks = @"UPDATE Books SET QuantityInStocks = QuantityInStocks + 1 
+                                                             WHERE BookId IN (SELECT BookId FROM BookLoans WHERE UserId = @id AND Status = 1)";
+                                SqlCommand cmdReturnStocks = new SqlCommand(queryReturnStocks, conn, transaction);
+                                cmdReturnStocks.Parameters.AddWithValue("@id", _selectedUserId);
+                                cmdReturnStocks.ExecuteNonQuery();
+
+                                // 2. Üyeye ait aktif ödünçleri pasife al (Kapat)
                                 string queryLoans = "UPDATE BookLoans SET Status = 0 WHERE UserId = @id AND Status = 1";
                                 SqlCommand cmdLoans = new SqlCommand(queryLoans, conn, transaction);
                                 cmdLoans.Parameters.AddWithValue("@id", _selectedUserId);
                                 cmdLoans.ExecuteNonQuery();
 
-                                transaction.Commit(); // Her şey yolundaysa kaydet
-                                MessageBox.Show("Üye ve tüm ödünç kayıtları pasife alındı.");
+                                transaction.Commit();
+                                MessageBox.Show("Üye silindi, elindeki aktif kitaplar kütüphane stoğuna başarıyla geri iade edildi.");
                             }
                             catch
                             {
-                                transaction.Rollback(); // Hata olursa hiçbir şey yapma
+                                transaction.Rollback();
                                 throw;
                             }
                         }
@@ -198,6 +227,21 @@ namespace KütüphaneOtomasyonuBerke
                     }
                 }
             }
+            else
+            {
+                MessageBox.Show("Lütfen silmek için önce listeden bir üye seçin.");
+            }
+        }
+
+        private void btnÜyeGeri_Click(object sender, EventArgs e)
+        {
+            // RAM DOSTU GERİ DÖNÜŞ: Yeni form oluşturma, arkadaki gizli ana formu bul ve göster
+            Form frmMainInstance = Application.OpenForms["frmMain"];
+            if (frmMainInstance != null)
+            {
+                frmMainInstance.Show();
+            }
+            this.Close(); // Bu formu tamamen kapat, RAM'den temizlensin
         }
     }
 }

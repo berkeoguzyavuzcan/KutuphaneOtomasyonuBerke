@@ -19,7 +19,6 @@ namespace KütüphaneOtomasyonuBerke
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            lblUserId.Text = Session.ActiveUserId.ToString();
             lblRoleName.Text= Session.ActiveRoleName.ToString();
             lblUserName.Text= Session.ActiveUserName.ToString();
 

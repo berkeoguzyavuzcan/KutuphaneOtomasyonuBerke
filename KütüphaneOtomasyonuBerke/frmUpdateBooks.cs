@@ -80,33 +80,46 @@ namespace KütüphaneOtomasyonuBerke
             using (SqlConnection conn = SqlCon.Connect())
             {
                 conn.Open();
-                string query = @"UPDATE Books SET BookName = @name, PublisherName = @pub, ReleasedDate = @date, 
-                                 PageCount = @page, QuantityInStocks = @stock, Status = @status, ModifiedDate = @mod 
-                                 WHERE BookId = @id";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    cmd.Parameters.AddWithValue("@name", tbxBookName.Text);
-                    cmd.Parameters.AddWithValue("@pub", tbxPublisher.Text);
-                    cmd.Parameters.AddWithValue("@date", dtpReleasedDate.Value);
-                    cmd.Parameters.AddWithValue("@page", (int)numPageCount.Value);
-                    cmd.Parameters.AddWithValue("@stock", (int)numStock.Value);
-                    cmd.Parameters.AddWithValue("@status", rbNotDeleted.Checked);
-                    cmd.Parameters.AddWithValue("@mod", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@id", _selectedBookId);
-                    cmd.ExecuteNonQuery();
-                }
+                    try
+                    {
+                        string query = @"UPDATE Books SET BookName = @name, PublisherName = @pub, ReleasedDate = @date, 
+                                         PageCount = @page, QuantityInStocks = @stock, Status = @status, ModifiedDate = @mod 
+                                         WHERE BookId = @id";
 
-                string queryAuth = "UPDATE BookAuthors SET AuthorId = @aid WHERE BookId = @bid";
-                using (SqlCommand cmdA = new SqlCommand(queryAuth, conn))
-                {
-                    cmdA.Parameters.AddWithValue("@aid", cbxAuthorName.SelectedValue);
-                    cmdA.Parameters.AddWithValue("@bid", _selectedBookId);
-                    cmdA.ExecuteNonQuery();
+                        using (SqlCommand cmd = new SqlCommand(query, conn, trans))
+                        {
+                            cmd.Parameters.AddWithValue("@name", tbxBookName.Text);
+                            cmd.Parameters.AddWithValue("@pub", tbxPublisher.Text);
+                            cmd.Parameters.AddWithValue("@date", dtpReleasedDate.Value);
+                            cmd.Parameters.AddWithValue("@page", (int)numPageCount.Value);
+                            cmd.Parameters.AddWithValue("@stock", (int)numStock.Value);
+                            cmd.Parameters.AddWithValue("@status", rbNotDeleted.Checked);
+                            cmd.Parameters.AddWithValue("@mod", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@id", _selectedBookId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        string queryAuth = "UPDATE BookAuthors SET AuthorId = @aid WHERE BookId = @bid";
+                        using (SqlCommand cmdA = new SqlCommand(queryAuth, conn, trans))
+                        {
+                            cmdA.Parameters.AddWithValue("@aid", cbxAuthorName.SelectedValue);
+                            cmdA.Parameters.AddWithValue("@bid", _selectedBookId);
+                            cmdA.ExecuteNonQuery();
+                        }
+
+                        trans.Commit();
+                        MessageBox.Show("Başarıyla güncellendi.");
+                        this.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback();
+                        MessageBox.Show("Güncelleme sırasında hata oluştu: " + ex.Message);
+                    }
                 }
             }
-            MessageBox.Show("Başarıyla güncellendi.");
-            this.Close();
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
