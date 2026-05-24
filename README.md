@@ -56,4 +56,42 @@ Sistemin modüllerini ve yetkilendirme altyapısını test edebilmeniz için ör
 
 ---
 
+# 📚 Kütüphane Otomasyon Sistemi - Kurulum ve Çalıştırma Kılavuzu
+
+Bu rehber, projenin lokal bilgisayarınızda sorunsuz bir şekilde ayağa kaldırılması ve veritabanı bağlantılarının hatasız kurulabilmesi için adım adım hazırlanmıştır.
+
+---
+
+## 🛠️ 1. Adım: Veritabanının SQL Server'a Yüklenmesi (Import)
+
+Projenin ana dizininde (bu klasörde) yer alan `KütüphaneOtomasyonuBerke.bacpac` yedek dosyası, veritabanı şemasını, tabloları ve test verilerini eksiksiz barındırmaktadır. Yüklemek için:
+
+1. **Microsoft SQL Server Management Studio (SSMS)** programını açın ve veritabanı sunucunuza bağlanın.
+2. Sol tarafta bulunan **Object Explorer** menüsündeki **Databases** klasörünün üzerine **sağ tıklayın**.
+3. Açılan menüden **"Import Data-tier Application..."** seçeneğine tıklayın.
+4. Karşınıza gelen sihirbaz penceresinde **Next (İleri)** butonuna basın.
+5. **"Import from local disk"** seçeneğinin yanındaki **Browse... (Gözat)** butonuna tıklayarak projenin ana dizinindeki **`KütüphaneOtomasyonuBerke.bacpac`** dosyasını seçin ve **Next** deyin.
+6. Bir sonraki ekranda veritabanı adı otomatik olarak `KütüphaneOtomasyonuBerke` şeklinde gelecektir. Ayarları değiştirmeden sırasıyla **Next** ve **Finish** butonlarına basın.
+7. Yükleme işlemi tamamlandığında ekranda tüm adımların yanında yeşil check `(Success)` logoları görünecektir. **Close** diyerek pencereyi kapatın.
+8. **Databases** klasörüne sağ tıklayıp **Refresh (Yenile)** yaptığınızda veritabanının başarıyla eklendiğini görebilirsiniz.
+
+---
+
+## 💻 2. Adım: Projenin Visual Studio ile Açılması
+
+1. Proje ana klasöründe bulunan **`KütüphaneOtomasyonuBerke.sln`** çözüm dosyasına çift tıklayarak projeyi **Visual Studio** üzerinde açın.
+2. Proje açıldığında sağ taraftaki **Solution Explorer** penceresinde projenin tüm formlarını, kütüphanelerini ve kaynak kodlarını görebilirsiniz.
+
+---
+
+## 🔌 3. Adım: Merkezi Veritabanı Bağlantı Kontrolü
+
+Projenin yerel SQL Server'ınız ile doğrudan konuşabilmesi için bağlantı mimarisi esnek ve merkezi hale getirilmiştir. 
+
+Eğer yerel SQL Server sunucunuz standart yerel adresi (lokal servis / nokta `.` / `localhost`) kullanıyorsa, kod içerisindeki merkezi Connection String yapısı sayesinde **proje ek bir konfigürasyon değişikliği gerektirmeden doğrudan çalışacaktır:**
+
+```csharp
+// Projede kullanılan merkezi SQL Server bağlantı şablonu
+string connectionString = "Data Source=.;Initial Catalog=KütüphaneOtomasyonuBerke;Integrated Security=True;";
+
 **Geliştirici:** Berke Oğuz Yavuzcan
