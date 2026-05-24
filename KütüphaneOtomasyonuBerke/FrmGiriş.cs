@@ -15,7 +15,7 @@ namespace KütüphaneOtomasyonuBerke
     {
         public FrmGiriş()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         private void btnGiriş_Click(object sender, EventArgs e)
